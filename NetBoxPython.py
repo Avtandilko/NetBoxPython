@@ -2,7 +2,7 @@ import requests
 import json
 
 
-class NetBoxPythonApi:
+class NetBoxPython:
     def __init__(self, base_api_url, api_headers, item_group, item_type):
         self.base_api_url = base_api_url
         self.api_headers = api_headers
@@ -32,20 +32,14 @@ class NetBoxPythonApi:
         self.item = requests.get('{}/{}'.format(self.form_request_string(), item_id), headers=self.api_headers).json()
         return self.item
 
-    # Works only with first level keys
-    def patch_item_field(self, item_id, field_name, field_value):
+    # Example:
+    # patch_item_field(1000, 'FF-FF-FF-FF-FF-FF', 'custom_fields', 'MAC Address')
+    def patch_item_field(self, item_id, field_value, *args):
         patch_url = ('{}/{}/'.format(self.form_request_string(), item_id))
-        patch_string = {field_name: field_value}
-        json_result_string = json.dumps(patch_string, ensure_ascii=False)
-        print(patch_url + '    ' + json_result_string)
-        requests.patch(patch_url, data=json_result_string.encode('utf-8'),
-                       headers=self.api_headers)
-
-    # Works only with second level keys
-    def patch_item_subfield(self, item_id, field_name, subfield_name, field_value):
-        patch_url = ('{}/{}/'.format(self.form_request_string(), item_id))
-        patch_string = {field_name: {subfield_name: field_value}}
-        json_result_string = json.dumps(patch_string, ensure_ascii=False)
+        patch_dict = {args[0]: field_value}
+        for arg in args[1:]:
+            patch_dict = {arg: patch_dict}
+        json_result_string = json.dumps(patch_dict, ensure_ascii=False)
         print(patch_url + '    ' + json_result_string)
         requests.patch(patch_url, data=json_result_string.encode('utf-8'),
                        headers=self.api_headers)
