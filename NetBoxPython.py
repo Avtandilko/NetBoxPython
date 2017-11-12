@@ -34,6 +34,7 @@ class NetBoxPython:
 
     # Example:
     # patch_item_field(1000, 'FF-FF-FF-FF-FF-FF', 'custom_fields', 'MAC Address')
+    # json_result_string is {"custom_fields": {"MAC Address": "FF-FF-FF-FF-FF-FF"}}
     def patch_item_field(self, item_id, field_value, *args):
         patch_url = ('{}/{}/'.format(self.form_request_string(), item_id))
         patch_dict = {args[0]: field_value}
