@@ -33,7 +33,7 @@ class NetBoxPython:
         return self.item
 
     # Example:
-    # patch_item_field(1000, 'FF-FF-FF-FF-FF-FF', 'custom_fields', 'MAC Address')
+    # patch_item_field(1000, 'FF-FF-FF-FF-FF-FF', 'MAC Address', 'custom_fields')
     # json_result_string is {"custom_fields": {"MAC Address": "FF-FF-FF-FF-FF-FF"}}
     def patch_item_field(self, item_id, field_value, *args):
         patch_url = ('{}/{}/'.format(self.form_request_string(), item_id))
@@ -41,7 +41,7 @@ class NetBoxPython:
         for arg in args[1:]:
             patch_dict = {arg: patch_dict}
         json_result_string = json.dumps(patch_dict, ensure_ascii=False)
-        print(patch_url + '    ' + json_result_string)
+        print(patch_url + ' ' + json_result_string)
         requests.patch(patch_url, data=json_result_string.encode('utf-8'),
                        headers=self.api_headers)
 
